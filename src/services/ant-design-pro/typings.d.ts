@@ -71,7 +71,7 @@ declare namespace API {
     name?: string;
     description?: string;
     method?: string;
-    status?: string;
+    status?: number;
     createdTime?: string;
   };
 
@@ -87,27 +87,31 @@ declare namespace API {
     status?: string;
   };
 
-
-  type NoticeIconList = {
-    data?: NoticeIconItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
-  };
-
-  type NoticeIconItemType = 'notification' | 'message' | 'event';
-
-  type NoticeIconItem = {
-    id?: string;
-    extra?: string;
-    key?: string;
-    read?: boolean;
-    avatar?: string;
-    title?: string;
-    status?: string;
-    datetime?: string;
+  /* 接口信息 */
+  type InterfaceVO = {
+    id?: number;
+    name?: string;
     description?: string;
-    type?: NoticeIconItemType;
+    path?: string;
+    url?: string;
+    requestParam?: string;
+    requestParamRemark?: string;
+    responseParamRemark?: string;
+    requestHeader?: string;
+    responseHeader?: string;
+    method?: string;
+    createdTime?: string;
+    updatedTime?: string;
   };
+
+  type InvokeInterfaceParam = {
+    accessKey: string,
+    secretKey: string,
+    id: number,
+    method: string,
+    path: string,
+    url: string,
+    requestParams?: string
+  }
 
 }

@@ -46,10 +46,16 @@ export default [
     ],
   },
   {
-    name: 'list.interface-list',
+    name: 'API商店',
     icon: 'table',
     path: '/interface',
     component: './InterfaceList',
+  },
+  {
+    name: '我的接口',
+    icon: 'table',
+    path: '/userInterface',
+    component: './UserInterfaceList',
   },
   {
     path: '/',
