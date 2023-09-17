@@ -26,7 +26,6 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
   });
 }
 
-
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
@@ -60,21 +59,30 @@ export async function getInterfaceList(
   };
 }
 
-/** 获取当前的用户 GET /api/interface/detail/{id} */
+/** 根据ID获取接口信息 GET /api/interface/detail */
 export async function getInterfaceById(
   params: {
     id?: number;
   },
   options?: { [key: string]: any }) {
-  return request<{
-    data: API.InterfaceVO;
-  }>(`/api/interface/detail/${params.id}`, {
+  const response = await request<{ data: API.InterfaceVO; }>(`/api/interface/detail/${params.id}`, {
+  //const response = await request<API.InterfaceVO>(`/api/interface/detail/${params.id}`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+  console.log("获取的接口信息>>", response);
+  return response;
+}
+
+/** 申请接口 GET /api/userInterface/apply/{id} */
+export async function applyInterface( id: number, options?: { [key: string]: any }) {
+  return request<any>(`/api/userInterface/apply/${id}`, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 获取用户接口列表 GET /api/userInterface/page */
+/** 获取用户已有的接口列表 GET /api/userInterface/page */
 export async function getUserInterfaceList(
   params: {
     current?: number;
@@ -97,21 +105,8 @@ export async function getUserInterfaceList(
   };
 }
 
-/** 新建规则 PUT /api/rule */
-export async function updateInterface(options?: { [key: string]: any }) {
-  return request<API.InterfacePageVO>('/api/rule', {
-    method: 'PUT',
-    ...(options || {}),
-  });
-}
-
-/** 新建规则 POST /api/rule */
-export async function addInterface(body: any, options?: { [key: string]: any }) {
-
-  console.log("addInterface>>body", body)
-
-  // 对body进行处理
-  const requestBody = {
+function processRequestBody(body: any){
+  return {
     ...body,
     requestParam: body.requestParam ? JSON.stringify(body.requestParam) : undefined,
     requestParamRemark: body.requestParamRemark ? JSON.stringify(body.requestParamRemark,
@@ -124,8 +119,23 @@ export async function addInterface(body: any, options?: { [key: string]: any }) 
     responseHeader: body.responseHeader? JSON.stringify(body.responseHeader,
       (key, value) => (key === "id" ||  key === "index"? undefined : value))  : undefined,
   }
-  console.log("addInterface>>requestBody", requestBody)
+}
 
+/** 修改接口 PUT /api/interface/update */
+export async function updateInterface(body: any, options?: { [key: string]: any }) {
+  const requestBody = processRequestBody(body);
+  return request<any>('/api/interface/update', {
+    method: 'PUT',
+    data: requestBody,
+    ...(options || {}),
+  });
+}
+
+
+/** 新建接口 POST /api/interface/add */
+export async function addInterface(body: any, options?: { [key: string]: any }) {
+  // 对body进行处理
+  const requestBody = processRequestBody(body);
   return  request<any>('/api/interface/add', {
     method: 'POST',
     data: requestBody,
@@ -136,18 +146,33 @@ export async function addInterface(body: any, options?: { [key: string]: any }) 
   });
 }
 
-/** 删除规则 DELETE /api/rule */
-export async function removeInterface(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/rule', {
-    method: 'DELETE',
+// status 0关闭 1开启
+/** 发布/下线接口 PUT /api/interface/setStatus */
+export async function setInterfaceStatus(
+  params: {
+    id: number;
+    status: number;
+  },
+  options?: { [key: string]: any }
+) {
+  return request<Record<string, any>>('/api/interface/setStatus', {
+    method: 'PUT',
+    data: params,
     ...(options || {}),
   });
 }
 
-// String invokeInterface(String apiName, long id, String params, String url, String method,String path)
+/** 删除接口 DELETE /api/interface/delete */
+export async function removeInterface(ids: number[], options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/interface/delete', {
+    method: 'DELETE',
+    data: ids,
+    ...(options || {}),
+  });
+}
+
 /** 在线调用接口 GET /api/interface/detail/{id} */
 export async function onlineInvokeInterface(body: API.InvokeInterfaceParam, options?: { [key: string]: any }) {
-  console.log("onlineInvokeInterface>>>body", body)
   return request<{ data: API.ResultVO; }>('/api/userInterface/invokeInterface',
     {
       method: 'POST',

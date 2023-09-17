@@ -28,28 +28,34 @@ export default [
     icon: 'smile',
     component: './Welcome',
   },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
-      {
-        path: '/admin',
-        redirect: '/admin/sub-page',
-      },
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
-      },
-    ],
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'admin',
+  //   icon: 'crown',
+  //   access: 'canAdmin',
+  //   routes: [
+  //     {
+  //       path: '/admin',
+  //       redirect: '/admin/sub-page',
+  //     },
+  //     {
+  //       path: '/admin/sub-page',
+  //       name: 'sub-page',
+  //       component: './Admin',
+  //     },
+  //   ],
+  // },
   {
     name: 'API商店',
     icon: 'table',
-    path: '/interface',
-    component: './InterfaceList',
+    path: '/interfaceShop',
+    component: './InterfaceShop',
+  },
+  {
+    name: '接口管理',
+    icon: 'table',
+    path: '/interfaceAdmin',
+    component: './InterfaceAdmin',
   },
   {
     name: '我的接口',

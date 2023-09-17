@@ -165,7 +165,7 @@ const responseHandler = (response: Response, options: RequestConfig) => {
   //   localStorage.removeItem('token');
   // }
 
-  if(response.data.errorCode !== 0){
+  if(response.data.code !== 0){
     message.error(response.data.data)
     throw response;
   }
