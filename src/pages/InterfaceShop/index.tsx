@@ -1,6 +1,5 @@
 import {
   applyInterface,
-  getInterfaceById,
   getInterfaceList,
 } from '@/services/ant-design-pro/api';
 import type {
@@ -8,9 +7,7 @@ import type {
   ProColumns,
 } from '@ant-design/pro-components';
 import {
-  FooterToolbar, ModalForm,
   PageContainer,
-  ProDescriptions,
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl } from '@umijs/max';
@@ -22,8 +19,6 @@ import InterfaceDetailModal from "@/components/InterfaceModal/InterfaceDetailMod
 
 const InterfaceShop: React.FC = () => {
 
-  /* 国际化 */
-  const intl = useIntl();
   /* 权限 */
   const access = useAccess();
   /* 查看接口详情 */
@@ -133,10 +128,7 @@ const InterfaceShop: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.InterfacePageVO, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: '查询信息',
-        })}
+        headerTitle={'查询信息'}
         actionRef={actionRefForSearch}
         rowKey="id"
         search={{
@@ -155,19 +147,16 @@ const InterfaceShop: React.FC = () => {
         }}
       />
 
-      {/* 使用 InterfaceDetailModal 组件 */}
-      <InterfaceDetailModal
-        showDetail={showDetail}
-        currentRow={currentRow}
-        onCancel={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        onRequest={async () => {
-          const response = await getInterfaceById({id: currentRow?.id});
-          return {data: response};
-        }}
-      />
+      {currentRow?.id &&
+        <InterfaceDetailModal
+          showDetail={showDetail}
+          interfaceId={currentRow.id}
+          onCancel={() => {
+            setCurrentRow(undefined);
+            setShowDetail(false);
+          }}
+        />
+      }
 
     </PageContainer>
   );

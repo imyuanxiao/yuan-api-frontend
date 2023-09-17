@@ -13,7 +13,7 @@ declare namespace API {
 
   /* 用户信息 */
   type UserVO = {
-    id?: number;
+    id: number;
     username?: string;
     role?: string;
     status?: string;
@@ -44,53 +44,52 @@ declare namespace API {
   type InterfacePageParam = {
     current?: number;
     pageSize?: number;
-
     name?: string;
     description?: string;
   };
 
   /* 分页结果列表 */
   type ResultList<T> = {
-    data?: T[];
+    records?: T[];
     total?: number;
     success?: boolean;
   }
 
   /* 接口分页信息 */
   type InterfacePageVO = {
-    id?: number;
-    name?: string;
+    id: number;
+    name: string;
     description?: string;
-    method?: string;
-    status?: number;
+    method: string;
+    status: number;
     createdTime?: string;
   };
 
   /* 用户接口关系分页信息 */
   type UserInterfacePageVO = {
-    id?: number;
-    name?: string;
+    id: number;
+    name: string;
     description?: string;
     leftNum?: number;
     totalNum?: number;
-    accessKey?: string;
-    secretKey?: string;
+    accessKey: string;
+    secretKey: string;
     status?: string;
   };
 
   /* 接口信息 */
   type InterfaceVO = {
-    id?: number;
-    name?: string;
+    id: number;
+    name: string;
     description?: string;
-    path?: string;
-    url?: string;
+    method: string;
+    url: string;
+    path: string;
     requestParam?: string;
     requestParamRemark?: string;
     responseParamRemark?: string;
     requestHeader?: string;
     responseHeader?: string;
-    method?: string;
     createdTime?: string;
     updatedTime?: string;
   };
@@ -104,5 +103,16 @@ declare namespace API {
     url: string,
     requestParams?: string
   }
+
+  type UserProfileParam = {
+    userPhone? : string;
+    userEmail? :string;
+    nickName? : string;
+  };
+
+  type UserPasswordParam = {
+    oldPassword? : string;
+    newPassword? :string;
+  };
 
 }

@@ -62,16 +62,13 @@ export async function getInterfaceList(
 /** 根据ID获取接口信息 GET /api/interface/detail */
 export async function getInterfaceById(
   params: {
-    id?: number;
+    id: number;
   },
   options?: { [key: string]: any }) {
-  const response = await request<{ data: API.InterfaceVO; }>(`/api/interface/detail/${params.id}`, {
-  //const response = await request<API.InterfaceVO>(`/api/interface/detail/${params.id}`, {
+  return await request<API.InterfaceVO>(`/api/interface/detail/${params.id}`, {
     method: 'GET',
     ...(options || {}),
   });
-  console.log("获取的接口信息>>", response);
-  return response;
 }
 
 /** 申请接口 GET /api/userInterface/apply/{id} */
@@ -108,7 +105,6 @@ export async function getUserInterfaceList(
 function processRequestBody(body: any){
   return {
     ...body,
-    requestParam: body.requestParam ? JSON.stringify(body.requestParam) : undefined,
     requestParamRemark: body.requestParamRemark ? JSON.stringify(body.requestParamRemark,
       (key, value) => (key === "id" ||  key === "index"? undefined : value))  : undefined,
     responseParamRemark: body.responseParamRemark ? JSON.stringify(
@@ -130,7 +126,6 @@ export async function updateInterface(body: any, options?: { [key: string]: any 
     ...(options || {}),
   });
 }
-
 
 /** 新建接口 POST /api/interface/add */
 export async function addInterface(body: any, options?: { [key: string]: any }) {
@@ -177,11 +172,29 @@ export async function onlineInvokeInterface(body: API.InvokeInterfaceParam, opti
     {
       method: 'POST',
       data: body,
-      headers: {
-        'Content-Type': 'application/json', // 设置请求头的 Content-Type 为 JSON
-      },
       ...(options || {}),
     });
 }
 
 
+/** 更新用户资料 PUT /api/user/profile */
+export async function updateUserProfile(body: API.UserProfileParam, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/profile', {
+    method: 'PUT',
+    data: {
+      ...body
+    },
+    ...(options || {}),
+  });
+}
+
+/** 更新密码 PUT /api/user/profile/password */
+export async function updatePassword(body: API.UserPasswordParam, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/profile/password', {
+    method: 'PUT',
+    data: {
+      ...body
+    },
+    ...(options || {}),
+  });
+}

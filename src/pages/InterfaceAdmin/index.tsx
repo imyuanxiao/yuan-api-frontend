@@ -1,5 +1,4 @@
 import {
-  getInterfaceById,
   getInterfaceList, removeInterface, setInterfaceStatus,
 } from '@/services/ant-design-pro/api';
 import type {
@@ -11,7 +10,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
+import { FormattedMessage } from '@umijs/max';
 import {Button, message} from 'antd';
 import React, { useRef, useState  } from 'react';
 import { interfaceStatusEnum } from "@/utils/CommonValue";
@@ -22,7 +21,7 @@ import InterfaceFormModal from "@/components/InterfaceModal/InterfaceFormModal";
 
 const InterfaceAdmin: React.FC = () => {
 
-  const intl = useIntl();
+  /* 权限管理 */
   const access = useAccess();
 
   const actionRefForSearch = useRef<ActionType>();
@@ -32,8 +31,6 @@ const InterfaceAdmin: React.FC = () => {
   const [selectedRowsState, setSelectedRows] = useState<API.InterfacePageVO[]>([]);
   const [currentPage, setCurrentPage] = useState(1); // 当前页码
   const [pageSize, setPageSize] = useState(10); // 每页显示的数据数量
-
-  //const [interfaceInfo, setInterfaceInfo] = useState<API.InterfaceVO>()
 
   /* 创建接口 */
   const [createModalOpen, handleModalOpen] = useState<boolean>(false);
@@ -66,7 +63,6 @@ const InterfaceAdmin: React.FC = () => {
       message.error('删除失败，请重试！');
     }
   };
-
   /* 接口分页表表头 */
   const InterfacePageColumns: ProColumns<API.InterfacePageVO>[] = [
     {
@@ -77,8 +73,8 @@ const InterfaceAdmin: React.FC = () => {
         />
       ),
       dataIndex: 'id',
-      hideInTable: true, // 隐藏该列
-      hideInSearch: true, // 隐藏搜索条件
+      hideInTable: true,
+      hideInSearch: true,
     },
     {
       title: (
@@ -143,23 +139,23 @@ const InterfaceAdmin: React.FC = () => {
         <>
           <Access
             key="editUserOption"
-            accessible={access.canAdmin}>
+            accessible={access.canAdmin || false}>
             {record.status === 0 && (
               <Button
                 onClick={() => {
                   setCurrentRow(record);
-                  handleInterfaceStatus(record?.id, true);
+                  handleInterfaceStatus(record.id, true);
                 }}
                 type={"primary"}
               >
                 <FormattedMessage id="common.operation.online" defaultMessage="上线" />
               </Button>
             )}
-            {record.status === 1 && (
+            {record?.id && record.status === 1 && (
               <Button
                 onClick={() => {
                   setCurrentRow(record);
-                  handleInterfaceStatus(record?.id,false);
+                  handleInterfaceStatus(record.id,false);
                 }}
                 danger
                 type={"primary"}
@@ -170,8 +166,6 @@ const InterfaceAdmin: React.FC = () => {
             <Button
               onClick={async () => {
                 setCurrentRow(record);
-                const response = await getInterfaceById({id: record.id});
-                //setInterfaceInfo(response.data);
                 handleUpdateModalOpen(true);
               }}
                 >
@@ -205,10 +199,7 @@ const InterfaceAdmin: React.FC = () => {
       />
 
       <ProTable<API.InterfacePageVO, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: '查询信息',
-        })}
+        headerTitle={"查询信息"}
         actionRef={actionRefForSearch}
         rowKey="id"
         search={{
@@ -217,7 +208,7 @@ const InterfaceAdmin: React.FC = () => {
         toolBarRender={() => [
           <Access
             key="tableAddUser"
-            accessible={access.canAdmin}>
+            accessible={access.canAdmin  || false}>
             <Button
               type="primary"
               onClick={() => {
@@ -230,10 +221,8 @@ const InterfaceAdmin: React.FC = () => {
           </Access>,
         ]}
         request={(params) => {
-          // 更新当前页码和每页显示数量
           setCurrentPage(params.current || 1);
           setPageSize(params.pageSize || 10);
-          // 调用实际的请求方法，传递 params 参数
           return getInterfaceList(params);
         }}
         columns={InterfacePageColumns}
@@ -243,8 +232,8 @@ const InterfaceAdmin: React.FC = () => {
           },
         }}
         pagination={{
-          pageSizeOptions: ['10', '20', '50'], // 自定义的每页显示数据数量选项
-          defaultPageSize: 10, // 默认的每页显示数据数量
+          pageSizeOptions: ['10', '20', '50'],
+          defaultPageSize: 10,
           showSizeChanger: true,
         }}
       />
@@ -258,7 +247,7 @@ const InterfaceAdmin: React.FC = () => {
             </div>
           }
         >
-          <Access accessible={access.canAdmin}>
+          <Access accessible={access.canAdmin  || false}>
             <Button
               onClick={async () => {
                 await handleRemove(selectedRowsState);
@@ -276,19 +265,16 @@ const InterfaceAdmin: React.FC = () => {
         </FooterToolbar>
       )}
 
-      {/* 使用 InterfaceDetailModal 组件 */}
-      <InterfaceDetailModal
-        showDetail={showDetail}
-        currentRow={currentRow}
-        onCancel={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        onRequest={async () => {
-          const response = await getInterfaceById({id: currentRow?.id});
-          return {data: response};
-        }}
-      />
+      {currentRow?.id &&
+        <InterfaceDetailModal
+          showDetail={showDetail}
+          interfaceId={currentRow.id}
+          onCancel={() => {
+            setCurrentRow(undefined);
+            setShowDetail(false);
+          }}
+        />
+      }
 
     </PageContainer>
   );

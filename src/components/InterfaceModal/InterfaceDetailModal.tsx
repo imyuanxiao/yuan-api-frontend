@@ -1,19 +1,16 @@
 import React from 'react';
 import { ModalForm, ProDescriptions } from '@ant-design/pro-components';
 import {FormattedMessage} from "@@/exports";
-import {getInterfaceById} from "@/services/ant-design-pro/api";
 import {Table} from "antd";
+import {getInterfaceById} from "@/services/ant-design-pro/api";
 
-// 其他导入语句...
 interface InterfaceDetailModalProps {
+  interfaceId: number;
   showDetail: boolean;
-  currentRow?: API.InterfacePageVO;
   onCancel: () => void;
-  onRequest: () => any;
 }
 
-const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({ showDetail, currentRow, onCancel, onRequest }) => {
-  // 在这里编写模态框内容
+const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({ showDetail, interfaceId, onCancel }) => {
   return (
     <ModalForm
       open={showDetail}
@@ -22,17 +19,18 @@ const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({ showDetail,
       }}
       submitter={false}
     >
-      {currentRow?.id &&(
         <ProDescriptions<API.InterfaceVO>
           column={4}
           title={
             <FormattedMessage id="pages.dataDetail.title" defaultMessage="接口详情"/>
           }
-          request={onRequest}
+          request={
+            async () => {
+              const response = await getInterfaceById({id: interfaceId});
+              return {data: response};
+            }
+          }
           layout={"vertical"}
-          params={{
-            id: currentRow?.id,
-          }}
           columns={
             [
               {
@@ -115,12 +113,6 @@ const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({ showDetail,
                     />
                   );
                 },
-              },
-              {
-                title: '请求参数示例',
-                dataIndex: 'requestParam',
-                valueType: 'textarea',
-                span: 4,
               },
               {
                 title: '响应参数说明',
@@ -215,9 +207,14 @@ const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({ showDetail,
                   );
                 }
               },
+              {
+                title: '请求参数示例',
+                dataIndex: 'requestParam',
+                valueType: 'textarea',
+                span: 4,
+              },
             ]}
         />
-      )}
     </ModalForm>
   );
 };

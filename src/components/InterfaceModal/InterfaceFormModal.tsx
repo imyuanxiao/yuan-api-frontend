@@ -13,13 +13,11 @@ import {ActionType, EditableFormInstance, ProColumns, ProFormInstance} from "@an
 
 // 其他导入语句...
 interface InterfaceFormModalProps {
-  //interfaceInfo?: API.InterfaceVO;
   interfaceId?: number;
   modalOpen: boolean;
   onCancel: () => void;
   onFinish: () => void;
 }
-
 
 const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCancel, onFinish, interfaceId }) => {
 
@@ -404,13 +402,12 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
             editableKeysForRequest,
             onChange: setEditableRowKeysForRequest,
           }}
-          //dataSource={interfaceInfo?.requestParamRemark}
         />
 
         <ProFormText
           name="requestParam"
           label={"请求参数示例"}
-          width={"100%"}
+          style={{width: '100%'}}
         />
 
         <EditableProTable<ResponseParamRemarkItem>
