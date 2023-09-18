@@ -1,15 +1,16 @@
-import React, {useRef, useState, useEffect} from 'react';
 import { ModalForm } from '@ant-design/pro-form';
-import { EditableProTable } from '@ant-design/pro-table';
 import ProFormText from '@ant-design/pro-form/lib/components/Text';
-import {
-  message
-  // 导入其他需要的依赖
-} from 'antd';
+import { EditableProTable } from '@ant-design/pro-table';
+import { message } from 'antd';
+import React, { useRef, useState } from 'react';
 
-// 导入 API 请求函数
-import {addInterface, getInterfaceById, updateInterface} from '@/services/ant-design-pro/api';
-import {ActionType, EditableFormInstance, ProColumns, ProFormInstance} from "@ant-design/pro-components"; // 替换为实际的 API 请求函数
+import { addInterface, getInterfaceById, updateInterface } from '@/services/ant-design-pro/api';
+import {
+  ActionType,
+  EditableFormInstance,
+  ProColumns,
+  ProFormInstance,
+} from '@ant-design/pro-components'; // 替换为实际的 API 请求函数
 
 // 其他导入语句...
 interface InterfaceFormModalProps {
@@ -19,19 +20,27 @@ interface InterfaceFormModalProps {
   onFinish: () => void;
 }
 
-const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCancel, onFinish, interfaceId }) => {
-
+const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({
+  modalOpen,
+  onCancel,
+  onFinish,
+  interfaceId,
+}) => {
   // 定义 formRef 和其他状态和函数
   const formRef = useRef<ProFormInstance<any>>();
   const [editableKeysForRequest, setEditableRowKeysForRequest] = useState<React.Key[]>(() => []);
   const editableFormRefForRequest = useRef<EditableFormInstance>();
   const actionRefForRequest = useRef<ActionType>();
 
-  const [editableKeysForRequestHeader, setEditableRowKeysForRequestHeader] = useState<React.Key[]>(() => []);
+  const [editableKeysForRequestHeader, setEditableRowKeysForRequestHeader] = useState<React.Key[]>(
+    () => [],
+  );
   const editableFormRefForRequestHeader = useRef<EditableFormInstance>();
   const actionRefForRequestHeader = useRef<ActionType>();
 
-  const [editableKeysForResponseHeader, setEditableRowKeysForResponseHeader] = useState<React.Key[]>(() => []);
+  const [editableKeysForResponseHeader, setEditableRowKeysForResponseHeader] = useState<
+    React.Key[]
+  >(() => []);
   const editableFormRefForResponseHeader = useRef<EditableFormInstance>();
   const actionRefForResponseHeader = useRef<ActionType>();
 
@@ -58,7 +67,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
       dataIndex: 'type',
       valueType: 'text',
       ellipsis: true,
-      initialValue: 'string'
+      initialValue: 'string',
     },
     {
       title: '是否必须',
@@ -124,7 +133,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
       dataIndex: 'type',
       valueType: 'text',
       ellipsis: true,
-      initialValue: 'string'
+      initialValue: 'string',
     },
     {
       title: '说明',
@@ -185,9 +194,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         <a
           key="delete"
           onClick={() => {
-            const tableDataSource = formRef.current?.getFieldValue(
-              'requestHeader',
-            ) as HeaderItem[];
+            const tableDataSource = formRef.current?.getFieldValue('requestHeader') as HeaderItem[];
             formRef.current?.setFieldsValue({
               requestHeader: tableDataSource.filter((item) => item.id !== row?.id),
             });
@@ -251,43 +258,51 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
   return (
     <ModalForm
       layout="vertical"
-      title={"新增接口"}
+      title={'新增接口'}
       formRef={formRef}
       open={modalOpen}
       modalProps={{
         onCancel: onCancel,
-        destroyOnClose: true
+        destroyOnClose: true,
       }}
       request={async () => {
-        if(interfaceId === undefined){
+        if (interfaceId === undefined) {
           return {};
         }
-        const response = await getInterfaceById({id: interfaceId});
+        const response = await getInterfaceById({ id: interfaceId });
         const interfaceInfo = response as API.InterfaceVO;
-        console.log("interfaceInfo>>", interfaceInfo)
-        return{
+        console.log('interfaceInfo>>', interfaceInfo);
+        return {
           ...interfaceInfo,
           requestParam: interfaceInfo.requestParam,
-          requestParamRemark: interfaceInfo.requestParamRemark? JSON.parse(interfaceInfo.requestParamRemark) : undefined,
-          requestHeader: interfaceInfo.requestHeader? JSON.parse(interfaceInfo.requestHeader) : undefined,
-          responseParamRemark: interfaceInfo.responseParamRemark? JSON.parse(interfaceInfo.responseParamRemark) : undefined,
-          responseHeader: interfaceInfo.responseHeader? JSON.parse(interfaceInfo.responseHeader) : undefined,
-        }
+          requestParamRemark: interfaceInfo.requestParamRemark
+            ? JSON.parse(interfaceInfo.requestParamRemark)
+            : undefined,
+          requestHeader: interfaceInfo.requestHeader
+            ? JSON.parse(interfaceInfo.requestHeader)
+            : undefined,
+          responseParamRemark: interfaceInfo.responseParamRemark
+            ? JSON.parse(interfaceInfo.responseParamRemark)
+            : undefined,
+          responseHeader: interfaceInfo.responseHeader
+            ? JSON.parse(interfaceInfo.responseHeader)
+            : undefined,
+        };
       }}
       onFinish={async (value) => {
-        if(
-          editableKeysForRequest.length > 0
-          || editableKeysForRequestHeader.length > 0
-          || editableKeysForResponseHeader.length > 0
-          || editableKeysForResponse.length > 0
-        ){
-          message.error("请先保存编辑中的数据！");
+        if (
+          editableKeysForRequest.length > 0 ||
+          editableKeysForRequestHeader.length > 0 ||
+          editableKeysForResponseHeader.length > 0 ||
+          editableKeysForResponse.length > 0
+        ) {
+          message.error('请先保存编辑中的数据！');
           return;
         }
         let success;
-        if(interfaceId === undefined){
+        if (interfaceId === undefined) {
           success = await addInterface(value);
-        }else{
+        } else {
           success = await updateInterface(value);
         }
         if (success) {
@@ -301,14 +316,19 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         },
         resetButtonProps: {
           onClick: () => {
-            if(
-              editableKeysForRequest.length > 0
-              || editableKeysForRequestHeader.length > 0
-              || editableKeysForResponseHeader.length > 0
-              || editableKeysForResponse.length > 0
-            ){
-              console.log(editableKeysForRequest,editableKeysForRequestHeader, editableKeysForResponseHeader,editableKeysForResponse )
-              message.error("请先保存编辑中的数据！");
+            if (
+              editableKeysForRequest.length > 0 ||
+              editableKeysForRequestHeader.length > 0 ||
+              editableKeysForResponseHeader.length > 0 ||
+              editableKeysForResponse.length > 0
+            ) {
+              console.log(
+                editableKeysForRequest,
+                editableKeysForRequestHeader,
+                editableKeysForResponseHeader,
+                editableKeysForResponse,
+              );
+              message.error('请先保存编辑中的数据！');
               return;
             }
             formRef.current?.resetFields();
@@ -316,18 +336,17 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         },
       }}
       style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '16px',
       }}
     >
-      <ProFormText
-        name="id"
-        hidden={true}
-      />
-      <div style={{ gridColumn: 'span 2', display: "flex",  gap: '16px' }}>
+      <ProFormText name="id" hidden={true} />
+      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '16px' }}>
         <ProFormText
           name="name"
-          width={"md"}
-          label={"名称"}
+          width={'md'}
+          label={'名称'}
           rules={[
             {
               required: true,
@@ -336,8 +355,8 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         />
         <ProFormText
           name="description"
-          width={"md"}
-          label={"描述"}
+          width={'md'}
+          label={'描述'}
           rules={[
             {
               required: true,
@@ -345,11 +364,11 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
           ]}
         />
       </div>
-      <div style={{ gridColumn: 'span 2' , display: "flex", gap: '16px'}}>
+      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '16px' }}>
         <ProFormText
           name="method"
-          label={"方法"}
-          width={"xs"}
+          label={'方法'}
+          width={'xs'}
           rules={[
             {
               required: true,
@@ -358,8 +377,8 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         />
         <ProFormText
           name="url"
-          label={"URL"}
-          width={"md"}
+          label={'URL'}
+          width={'md'}
           rules={[
             {
               required: true,
@@ -368,8 +387,8 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         />
         <ProFormText
           name="path"
-          label={"路径"}
-          width={"sm"}
+          label={'路径'}
+          width={'sm'}
           rules={[
             {
               required: true,
@@ -377,7 +396,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
           ]}
         />
       </div>
-      <div style={{ gridColumn: 'span 2'}}>
+      <div style={{ gridColumn: 'span 2' }}>
         <EditableProTable<RequestParamRemarkItem>
           rowKey="id"
           scroll={{
@@ -404,11 +423,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
           }}
         />
 
-        <ProFormText
-          name="requestParam"
-          label={"请求参数示例"}
-          style={{width: '100%'}}
-        />
+        <ProFormText name="requestParam" label={'请求参数示例'} style={{ width: '100%' }} />
 
         <EditableProTable<ResponseParamRemarkItem>
           rowKey="id"
@@ -438,7 +453,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         />
       </div>
 
-      <EditableProTable<{ key:string, value:string }>
+      <EditableProTable<{ key: string; value: string }>
         rowKey="id"
         scroll={{
           x: true,
@@ -463,7 +478,7 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({ modalOpen, onCa
         }}
       />
 
-      <EditableProTable<{ key:string, value:string }>
+      <EditableProTable<{ key: string; value: string }>
         rowKey="id"
         scroll={{
           x: true,

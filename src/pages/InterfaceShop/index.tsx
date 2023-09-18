@@ -1,24 +1,13 @@
-import {
-  applyInterface,
-  getInterfaceList,
-} from '@/services/ant-design-pro/api';
-import type {
-  ActionType,
-  ProColumns,
-} from '@ant-design/pro-components';
-import {
-  PageContainer,
-  ProTable,
-} from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import {Button, message} from 'antd';
-import React, { useRef, useState  } from 'react';
-import { interfaceStatusEnum } from "@/utils/CommonValue";
+import InterfaceDetailModal from '@/components/InterfaceModal/InterfaceDetailModal';
+import { applyInterface, getInterfaceList } from '@/services/ant-design-pro/api';
+import { interfaceStatusEnum } from '@/utils/CommonValue';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { Button, message } from 'antd';
+import React, { useRef, useState } from 'react';
 import { useAccess } from 'umi';
-import InterfaceDetailModal from "@/components/InterfaceModal/InterfaceDetailModal";
 
 const InterfaceShop: React.FC = () => {
-
   /* 权限 */
   const access = useAccess();
   /* 查看接口详情 */
@@ -32,23 +21,13 @@ const InterfaceShop: React.FC = () => {
   /* 接口分页信息表头 */
   const InterfacePageColumns: ProColumns<API.InterfacePageVO>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="typings.InterfacePageVO.id"
-          defaultMessage="接口ID"
-        />
-      ),
+      title: '接口ID',
       dataIndex: 'id',
       hideInTable: true, // 隐藏该列
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: (
-        <FormattedMessage
-          id="common.index"
-          defaultMessage="序号"
-        />
-      ),
+      title: '序号',
       dataIndex: 'index',
       hideInSearch: true,
       render: (dom, entity, index) => {
@@ -57,12 +36,7 @@ const InterfaceShop: React.FC = () => {
       },
     },
     {
-      title: (
-        <FormattedMessage
-          id="typings.InterfacePageVO.name"
-          defaultMessage="名称"
-        />
-      ),
+      title: '名称',
       dataIndex: 'name',
       render: (dom, entity) => {
         return (
@@ -78,27 +52,27 @@ const InterfaceShop: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userPhone" defaultMessage="描述"/>,
+      title: '描述',
       dataIndex: 'description',
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userPhone" defaultMessage="方法"/>,
+      title: '方法',
       dataIndex: 'method',
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userStatus" defaultMessage="状态"/>,
+      title: '状态',
       dataIndex: 'status',
       valueEnum: interfaceStatusEnum,
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userPhone" defaultMessage="创建时间"/>,
+      title: '创建时间',
       dataIndex: 'createdTime',
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="common.operation" defaultMessage="操作" />,
+      title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -109,21 +83,21 @@ const InterfaceShop: React.FC = () => {
               handleApplyInterface(record.id);
             }}
           >
-            <FormattedMessage id="common.operation.edit" defaultMessage="申请" />
+            申请
           </Button>
-        </>
+        </>,
       ],
     },
   ];
   /* 申请接口 */
   const handleApplyInterface = async (id: number) => {
-    if(id){
+    if (id) {
       const response = await applyInterface(id);
       message.success(response);
-    }else{
-      message.error("页面数据异常！")
+    } else {
+      message.error('页面数据异常！');
     }
-  }
+  };
 
   return (
     <PageContainer>
@@ -147,7 +121,7 @@ const InterfaceShop: React.FC = () => {
         }}
       />
 
-      {currentRow?.id &&
+      {currentRow?.id && (
         <InterfaceDetailModal
           showDetail={showDetail}
           interfaceId={currentRow.id}
@@ -156,8 +130,7 @@ const InterfaceShop: React.FC = () => {
             setShowDetail(false);
           }}
         />
-      }
-
+      )}
     </PageContainer>
   );
 };

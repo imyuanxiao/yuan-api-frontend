@@ -16,7 +16,7 @@ export default [
     layout: false,
     routes: [
       {
-        name: 'login',
+        name: '登录',
         path: '/user/login',
         component: './User/Login',
       },
@@ -24,30 +24,13 @@ export default [
   },
   {
     path: '/welcome',
-    name: 'welcome',
+    name: '欢迎',
     icon: 'smile',
     component: './Welcome',
   },
-  // {
-  //   path: '/admin',
-  //   name: 'admin',
-  //   icon: 'crown',
-  //   access: 'canAdmin',
-  //   routes: [
-  //     {
-  //       path: '/admin',
-  //       redirect: '/admin/sub-page',
-  //     },
-  //     {
-  //       path: '/admin/sub-page',
-  //       name: 'sub-page',
-  //       component: './Admin',
-  //     },
-  //   ],
-  // },
   {
     name: 'API商店',
-    icon: 'table',
+    icon: 'ShopOutlined',
     path: '/interfaceShop',
     component: './InterfaceShop',
   },
@@ -59,9 +42,15 @@ export default [
   },
   {
     name: '我的接口',
-    icon: 'table',
+    icon: 'AppstoreOutlined',
     path: '/userInterface',
     component: './UserInterfaceList',
+  },
+  {
+    path: '/profile',
+    name: '个人中心',
+    icon: 'UserOutlined',
+    component: './Profile',
   },
   {
     path: '/',

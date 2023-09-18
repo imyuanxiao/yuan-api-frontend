@@ -2,7 +2,6 @@
 /* eslint-disable */
 
 declare namespace API {
-
   /* 统一返回信息 */
   type ResultVO = {
     success?: boolean;
@@ -27,7 +26,6 @@ declare namespace API {
   type LoginParams = {
     username?: string;
     password?: string;
-    // autoLogin?: boolean;
   };
 
   /* 登录信息返回参数 */
@@ -53,7 +51,7 @@ declare namespace API {
     records?: T[];
     total?: number;
     success?: boolean;
-  }
+  };
 
   /* 接口分页信息 */
   type InterfacePageVO = {
@@ -95,24 +93,25 @@ declare namespace API {
   };
 
   type InvokeInterfaceParam = {
-    accessKey: string,
-    secretKey: string,
-    id: number,
-    method: string,
-    path: string,
-    url: string,
-    requestParams?: string
-  }
+    accessKey: string;
+    secretKey: string;
+    id: number;
+    method: string;
+    path: string;
+    url: string;
+    requestParams?: string;
+  };
 
   type UserProfileParam = {
-    userPhone? : string;
-    userEmail? :string;
-    nickName? : string;
+    id: number;
+    username?: string;
+    nickName?: string;
+    phone?: string;
+    email?: string;
   };
 
   type UserPasswordParam = {
-    oldPassword? : string;
-    newPassword? :string;
+    oldPassword?: string;
+    newPassword?: string;
   };
-
 }

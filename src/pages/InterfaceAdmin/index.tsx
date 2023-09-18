@@ -1,26 +1,19 @@
+import InterfaceDetailModal from '@/components/InterfaceModal/InterfaceDetailModal';
+import InterfaceFormModal from '@/components/InterfaceModal/InterfaceFormModal';
 import {
-  getInterfaceList, removeInterface, setInterfaceStatus,
+  getInterfaceList,
+  removeInterface,
+  setInterfaceStatus,
 } from '@/services/ant-design-pro/api';
-import type {
-  ActionType,
-  ProColumns,
-} from '@ant-design/pro-components';
-import {
-  FooterToolbar,
-  PageContainer,
-  ProTable,
-} from '@ant-design/pro-components';
-import { FormattedMessage } from '@umijs/max';
-import {Button, message} from 'antd';
-import React, { useRef, useState  } from 'react';
-import { interfaceStatusEnum } from "@/utils/CommonValue";
-import { useAccess, Access } from 'umi';
-import {PlusOutlined} from "@ant-design/icons";
-import InterfaceDetailModal from "@/components/InterfaceModal/InterfaceDetailModal";
-import InterfaceFormModal from "@/components/InterfaceModal/InterfaceFormModal";
+import { interfaceStatusEnum } from '@/utils/CommonValue';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
+import { Button, message } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Access, useAccess } from 'umi';
 
 const InterfaceAdmin: React.FC = () => {
-
   /* 权限管理 */
   const access = useAccess();
 
@@ -37,19 +30,19 @@ const InterfaceAdmin: React.FC = () => {
   /* 编辑接口 */
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   /* 上线/下线接口 */
-  const handleInterfaceStatus = async(id: number, status: boolean) =>{
-    if(id){
+  const handleInterfaceStatus = async (id: number, status: boolean) => {
+    if (id) {
       const response = await setInterfaceStatus({
         id: id,
-        status: status? 1: 0
-      })
-      if(response){
+        status: status ? 1 : 0,
+      });
+      if (response) {
         actionRefForSearch.current?.reload();
       }
-    }else{
-      message.error("页面数据异常！")
+    } else {
+      message.error('页面数据异常！');
     }
-  }
+  };
   /* 批量删除接口 */
   const handleRemove = async (selectedRows: API.InterfacePageVO[]) => {
     const hide = message.loading('正在删除');
@@ -66,23 +59,13 @@ const InterfaceAdmin: React.FC = () => {
   /* 接口分页表表头 */
   const InterfacePageColumns: ProColumns<API.InterfacePageVO>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="typings.InterfacePageVO.id"
-          defaultMessage="接口ID"
-        />
-      ),
+      title: '接口ID',
       dataIndex: 'id',
       hideInTable: true,
       hideInSearch: true,
     },
     {
-      title: (
-        <FormattedMessage
-          id="common.index"
-          defaultMessage="序号"
-        />
-      ),
+      title: '序号',
       dataIndex: 'index',
       hideInSearch: true,
       render: (dom, entity, index) => {
@@ -91,12 +74,7 @@ const InterfaceAdmin: React.FC = () => {
       },
     },
     {
-      title: (
-        <FormattedMessage
-          id="typings.InterfacePageVO.name"
-          defaultMessage="名称"
-        />
-      ),
+      title: '名称',
       dataIndex: 'name',
       render: (dom, entity) => {
         return (
@@ -112,55 +90,53 @@ const InterfaceAdmin: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userPhone" defaultMessage="描述"/>,
+      title: '描述',
       dataIndex: 'description',
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userPhone" defaultMessage="方法"/>,
+      title: '方法',
       dataIndex: 'method',
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userStatus" defaultMessage="状态"/>,
+      title: '状态',
       dataIndex: 'status',
       valueEnum: interfaceStatusEnum,
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="typings.UserListItem.userPhone" defaultMessage="创建时间"/>,
+      title: '创建时间',
       dataIndex: 'createdTime',
-      hideInSearch: true, // 隐藏搜索条件
+      hideInSearch: true,
     },
     {
-      title: <FormattedMessage id="common.operation" defaultMessage="操作" />,
+      title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
         <>
-          <Access
-            key="editUserOption"
-            accessible={access.canAdmin || false}>
+          <Access key="editUserOption" accessible={access.canAdmin || false}>
             {record.status === 0 && (
               <Button
                 onClick={() => {
                   setCurrentRow(record);
                   handleInterfaceStatus(record.id, true);
                 }}
-                type={"primary"}
+                type={'primary'}
               >
-                <FormattedMessage id="common.operation.online" defaultMessage="上线" />
+                上线
               </Button>
             )}
             {record?.id && record.status === 1 && (
               <Button
                 onClick={() => {
                   setCurrentRow(record);
-                  handleInterfaceStatus(record.id,false);
+                  handleInterfaceStatus(record.id, false);
                 }}
                 danger
-                type={"primary"}
+                type={'primary'}
               >
-                <FormattedMessage id="common.operation.offline" defaultMessage="下线" />
+                下线
               </Button>
             )}
             <Button
@@ -168,19 +144,17 @@ const InterfaceAdmin: React.FC = () => {
                 setCurrentRow(record);
                 handleUpdateModalOpen(true);
               }}
-                >
-              <FormattedMessage id="common.operation.edit" defaultMessage="编辑" />
+            >
+              编辑
             </Button>
           </Access>
-
-        </>
+        </>,
       ],
     },
   ];
 
   return (
     <PageContainer>
-
       {/* 新增及编辑组件 */}
       <InterfaceFormModal
         modalOpen={createModalOpen || updateModalOpen}
@@ -190,7 +164,7 @@ const InterfaceAdmin: React.FC = () => {
           handleUpdateModalOpen(false);
           setCurrentRow(undefined);
         }}
-        onFinish={() =>{
+        onFinish={() => {
           handleModalOpen(false);
           handleUpdateModalOpen(false);
           setCurrentRow(undefined);
@@ -199,16 +173,14 @@ const InterfaceAdmin: React.FC = () => {
       />
 
       <ProTable<API.InterfacePageVO, API.PageParams>
-        headerTitle={"查询信息"}
+        headerTitle={'查询信息'}
         actionRef={actionRefForSearch}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Access
-            key="tableAddUser"
-            accessible={access.canAdmin  || false}>
+          <Access key="tableAddUser" accessible={access.canAdmin || false}>
             <Button
               type="primary"
               onClick={() => {
@@ -216,7 +188,7 @@ const InterfaceAdmin: React.FC = () => {
                 handleModalOpen(true);
               }}
             >
-              <PlusOutlined/> <FormattedMessage id="common.operation.add" defaultMessage="新增"/>
+              <PlusOutlined /> 新增
             </Button>
           </Access>,
         ]}
@@ -241,13 +213,11 @@ const InterfaceAdmin: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen"/>{' '}
-              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项"/>
+              选择 <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a> 项
             </div>
           }
         >
-          <Access accessible={access.canAdmin  || false}>
+          <Access accessible={access.canAdmin || false}>
             <Button
               onClick={async () => {
                 await handleRemove(selectedRowsState);
@@ -256,16 +226,13 @@ const InterfaceAdmin: React.FC = () => {
               }}
               danger={true}
             >
-              <FormattedMessage
-                id="pages.searchTable.batchDeletion"
-                defaultMessage="批量删除"
-              />
+              批量删除
             </Button>
           </Access>
         </FooterToolbar>
       )}
 
-      {currentRow?.id &&
+      {currentRow?.id && (
         <InterfaceDetailModal
           showDetail={showDetail}
           interfaceId={currentRow.id}
@@ -274,8 +241,7 @@ const InterfaceAdmin: React.FC = () => {
             setShowDetail(false);
           }}
         />
-      }
-
+      )}
     </PageContainer>
   );
 };

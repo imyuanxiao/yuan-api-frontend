@@ -1,20 +1,12 @@
-import {
-  getUserInterfaceList,
-} from '@/services/ant-design-pro/api';
-import type {ActionType, ProColumns} from '@ant-design/pro-components';
-import {
-  FooterToolbar,
-  PageContainer,
-  ProTable,
-} from '@ant-design/pro-components';
-import { FormattedMessage } from '@umijs/max';
-import {Button, Input} from 'antd';
+import InterfaceDetailModal from '@/components/InterfaceModal/InterfaceDetailModal';
+import InterfaceInvokeModal from '@/components/InterfaceModal/InterfaceInvokeModal';
+import { getUserInterfaceList } from '@/services/ant-design-pro/api';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
+import { Button, Input } from 'antd';
 import React, { useRef, useState } from 'react';
-import InterfaceDetailModal from "@/components/InterfaceModal/InterfaceDetailModal";
-import InterfaceInvokeModal from "@/components/InterfaceModal/InterfaceInvokeModal";
 
 const UserInterfaceList: React.FC = () => {
-
   /* 接口信息 */
   const [showDetail, setShowDetail] = useState<boolean>(false);
   /* 在线调试 */
@@ -28,23 +20,13 @@ const UserInterfaceList: React.FC = () => {
 
   const columns: ProColumns<API.UserInterfacePageVO>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="typings.UserInterfacePageVO.id"
-          defaultMessage="接口ID"
-        />
-      ),
+      title: '接口ID',
       dataIndex: 'id',
       hideInTable: true,
       hideInSearch: true,
     },
     {
-      title: (
-        <FormattedMessage
-          id="common.index"
-          defaultMessage="序号"
-        />
-      ),
+      title: '序号',
       dataIndex: 'index',
       hideInSearch: true,
       render: (dom, entity, index) => {
@@ -53,12 +35,7 @@ const UserInterfaceList: React.FC = () => {
       },
     },
     {
-      title: (
-        <FormattedMessage
-          id="typings.UserInterfacePageVO.name"
-          defaultMessage="名称"
-        />
-      ),
+      title: '名称',
       dataIndex: 'name',
       render: (dom, entity) => {
         return (
@@ -74,41 +51,33 @@ const UserInterfaceList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="typings.UserInterfacePageVO.description" defaultMessage="描述"/>,
+      title: '描述',
       dataIndex: 'description',
     },
     {
-      title: <FormattedMessage id="typings.UserInterfacePageVO.leftNum" defaultMessage="剩余次数"/>,
+      title: '剩余次数',
       dataIndex: 'leftNum',
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="typings.UserInterfacePageVO.totalNum" defaultMessage="总次数"/>,
+      title: '总次数',
       dataIndex: 'totalNum',
       hideInSearch: true, // 隐藏搜索条件
     },
     {
-      title: <FormattedMessage id="typings.UserInterfacePageVO.accessKey" defaultMessage="accessKey"/>,
+      title: 'accessKey',
       dataIndex: 'accessKey',
       hideInSearch: true,
-      render: (_, record) => [
-        <Input.Password
-          defaultValue={record.accessKey}
-        />
-      ],
+      render: (_, record) => [<Input.Password defaultValue={record.accessKey} />],
     },
     {
-      title: <FormattedMessage id="typings.UserInterfacePageVO.secretKey" defaultMessage="secretKey"/>,
+      title: 'secretKey',
       dataIndex: 'secretKey',
       hideInSearch: true,
-      render: (_, record) => [
-        <Input.Password
-          defaultValue={record.secretKey}
-        />
-      ],
+      render: (_, record) => [<Input.Password defaultValue={record.secretKey} />],
     },
     {
-      title: <FormattedMessage id="common.operation" defaultMessage="操作" />,
+      title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -118,18 +87,18 @@ const UserInterfaceList: React.FC = () => {
               setCurrentRow(record);
               setShowInvoke(true);
             }}
-            type={"primary"}
+            type={'primary'}
           >
-            <FormattedMessage id="common.operation.edit" defaultMessage="在线调试" />
+            在线调试
           </Button>
-        </>
+        </>,
       ],
     },
   ];
   return (
     <PageContainer>
       <ProTable<API.UserInterfacePageVO, API.PageParams>
-        headerTitle={"查询信息"}
+        headerTitle={'查询信息'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -157,16 +126,13 @@ const UserInterfaceList: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen"/>{' '}
-              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项"/>
+              选择 <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a> 项
             </div>
           }
-        >
-        </FooterToolbar>
+        ></FooterToolbar>
       )}
 
-      {currentRow?.id &&
+      {currentRow?.id && (
         <InterfaceDetailModal
           showDetail={showDetail}
           interfaceId={currentRow.id}
@@ -175,18 +141,17 @@ const UserInterfaceList: React.FC = () => {
             setShowDetail(false);
           }}
         />
-      }
-      {currentRow?.id &&
-          <InterfaceInvokeModal
-            showInvoke={showInvoke}
-            currentRow={currentRow}
-            onCancel={() => {
-              setCurrentRow(undefined);
-              setShowInvoke(false);
-            }}
-          />
-      }
-
+      )}
+      {currentRow?.id && (
+        <InterfaceInvokeModal
+          showInvoke={showInvoke}
+          currentRow={currentRow}
+          onCancel={() => {
+            setCurrentRow(undefined);
+            setShowInvoke(false);
+          }}
+        />
+      )}
     </PageContainer>
   );
 };

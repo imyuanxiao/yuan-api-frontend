@@ -1,15 +1,13 @@
 import Footer from '@/components/Footer';
-import {Question, SelectLang} from '@/components/RightContent';
-import {LinkOutlined} from '@ant-design/icons';
-import type {Settings as LayoutSettings} from '@ant-design/pro-components';
-import {SettingDrawer} from '@ant-design/pro-components';
-import type {RequestConfig, RunTimeLayoutConfig} from '@umijs/max';
-import {history, Link} from '@umijs/max';
+import { LinkOutlined } from '@ant-design/icons';
+import type { Settings as LayoutSettings } from '@ant-design/pro-components';
+import { SettingDrawer } from '@ant-design/pro-components';
+import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
+import { history, Link } from '@umijs/max';
+import { message } from 'antd';
 import defaultSettings from '../config/defaultSettings';
-import {currentUser as queryCurrentUser} from './services/ant-design-pro/api';
-import React from 'react';
-import {AvatarDropdown, AvatarName} from './components/RightContent/AvatarDropdown';
-import {message} from "antd";
+import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
+import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -52,7 +50,7 @@ export async function getInitialState(): Promise<{
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
+    //actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
       title: <AvatarName />,
@@ -126,15 +124,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   };
 };
 
-// /**
-//  * @name request 配置，可以配置错误处理
-//  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
-//  * @doc https://umijs.org/docs/max/request#配置
-//  */
-// export const request = {
-//   ...errorConfig,
-// };
-
 /**
  * 请求拦截器
  * @param url
@@ -158,22 +147,20 @@ const requestHandler = (url: string, options: RequestConfig) => {
  * @param options
  */
 const responseHandler = (response: Response, options: RequestConfig) => {
-
   // if(response.status === 500){
   //   // 500 意味着token出错，删除本地token
   //   console.log("删除本地token>>")
   //   localStorage.removeItem('token');
   // }
 
-  if(response.data.code !== 0){
-    message.error(response.data.data)
+  if (response.data.code !== 0) {
+    message.error(response.data.data);
     throw response;
   }
 
   // 返回 ResultVO 给对应的API
   return response.data;
 };
-
 
 /**
  * @name request 配置，可以配置错误处理
@@ -196,15 +183,14 @@ export const request: RequestConfig = {
 
       const { response } = error;
 
-      if(response && response.status === 500){
+      if (response && response.status === 500) {
         console.log('response.data>>>', response.data);
-        if(response.data.data){
-          message.error(response.data.data)
+        if (response.data.data) {
+          message.error(response.data.data);
         }
         localStorage.removeItem('token');
         history.push(loginPath);
       }
-
     },
   },
   // 全局接口异常处理
@@ -212,5 +198,4 @@ export const request: RequestConfig = {
   requestInterceptors: [requestHandler],
   // 响应拦截器
   responseInterceptors: [responseHandler],
-
 };

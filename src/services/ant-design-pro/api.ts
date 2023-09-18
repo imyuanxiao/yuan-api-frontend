@@ -1,14 +1,11 @@
 // @ts-ignore
 /* eslint-disable */
-import {request} from '@umijs/max';
+import { request } from '@umijs/max';
 
 /** 登录接口 POST /api/login/account */
 export async function register(body: API.LoginParams, options?: { [key: string]: any }) {
   return request<API.LoginResponseVO>('/api/auth/register', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     data: body,
     ...(options || {}),
   });
@@ -18,9 +15,6 @@ export async function register(body: API.LoginParams, options?: { [key: string]:
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
   return request<API.LoginResponseVO>('/api/auth/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     data: body,
     ...(options || {}),
   });
@@ -28,9 +22,7 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
-  return request<{
-    data: API.UserVO;
-  }>('/api/user/currentUser', {
+  return request<API.UserVO>('/api/user/currentUser', {
     method: 'GET',
     ...(options || {}),
   });
@@ -46,7 +38,7 @@ export async function getInterfaceList(
   },
   options?: { [key: string]: any },
 ) {
-  const response = await  request<API.ResultList<API.InterfacePageVO>>('/api/interface/page', {
+  const response = await request<API.ResultList<API.InterfacePageVO>>('/api/interface/page', {
     method: 'POST',
     data: {
       ...params,
@@ -64,7 +56,8 @@ export async function getInterfaceById(
   params: {
     id: number;
   },
-  options?: { [key: string]: any }) {
+  options?: { [key: string]: any },
+) {
   return await request<API.InterfaceVO>(`/api/interface/detail/${params.id}`, {
     method: 'GET',
     ...(options || {}),
@@ -72,7 +65,7 @@ export async function getInterfaceById(
 }
 
 /** 申请接口 GET /api/userInterface/apply/{id} */
-export async function applyInterface( id: number, options?: { [key: string]: any }) {
+export async function applyInterface(id: number, options?: { [key: string]: any }) {
   return request<any>(`/api/userInterface/apply/${id}`, {
     method: 'GET',
     ...(options || {}),
@@ -89,32 +82,46 @@ export async function getUserInterfaceList(
   },
   options?: { [key: string]: any },
 ) {
-  const response = await  request<API.ResultList<API.UserInterfacePageVO>>('/api/userInterface/page', {
-    method: 'POST',
-    data: {
-      ...params,
+  const response = await request<API.ResultList<API.UserInterfacePageVO>>(
+    '/api/userInterface/page',
+    {
+      method: 'POST',
+      data: {
+        ...params,
+      },
+      ...(options || {}),
     },
-    ...(options || {}),
-  });
+  );
   return {
     ...response,
     data: response.records,
   };
 }
 
-function processRequestBody(body: any){
+function processRequestBody(body: any) {
   return {
     ...body,
-    requestParamRemark: body.requestParamRemark ? JSON.stringify(body.requestParamRemark,
-      (key, value) => (key === "id" ||  key === "index"? undefined : value))  : undefined,
-    responseParamRemark: body.responseParamRemark ? JSON.stringify(
-      body.responseParamRemark,
-      (key, value) => (key === "id"||  key === "index" ? undefined : value))  : undefined,
-    requestHeader: body.requestHeader ? JSON.stringify(body.requestHeader,
-      (key, value) => (key === "id" ||  key === "index"? undefined : value))  : undefined,
-    responseHeader: body.responseHeader? JSON.stringify(body.responseHeader,
-      (key, value) => (key === "id" ||  key === "index"? undefined : value))  : undefined,
-  }
+    requestParamRemark: body.requestParamRemark
+      ? JSON.stringify(body.requestParamRemark, (key, value) =>
+          key === 'id' || key === 'index' ? undefined : value,
+        )
+      : undefined,
+    responseParamRemark: body.responseParamRemark
+      ? JSON.stringify(body.responseParamRemark, (key, value) =>
+          key === 'id' || key === 'index' ? undefined : value,
+        )
+      : undefined,
+    requestHeader: body.requestHeader
+      ? JSON.stringify(body.requestHeader, (key, value) =>
+          key === 'id' || key === 'index' ? undefined : value,
+        )
+      : undefined,
+    responseHeader: body.responseHeader
+      ? JSON.stringify(body.responseHeader, (key, value) =>
+          key === 'id' || key === 'index' ? undefined : value,
+        )
+      : undefined,
+  };
 }
 
 /** 修改接口 PUT /api/interface/update */
@@ -131,7 +138,7 @@ export async function updateInterface(body: any, options?: { [key: string]: any 
 export async function addInterface(body: any, options?: { [key: string]: any }) {
   // 对body进行处理
   const requestBody = processRequestBody(body);
-  return  request<any>('/api/interface/add', {
+  return request<any>('/api/interface/add', {
     method: 'POST',
     data: requestBody,
     headers: {
@@ -148,7 +155,7 @@ export async function setInterfaceStatus(
     id: number;
     status: number;
   },
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<Record<string, any>>('/api/interface/setStatus', {
     method: 'PUT',
@@ -167,34 +174,38 @@ export async function removeInterface(ids: number[], options?: { [key: string]: 
 }
 
 /** 在线调用接口 GET /api/interface/detail/{id} */
-export async function onlineInvokeInterface(body: API.InvokeInterfaceParam, options?: { [key: string]: any }) {
-  return request<{ data: API.ResultVO; }>('/api/userInterface/invokeInterface',
-    {
-      method: 'POST',
-      data: body,
-      ...(options || {}),
-    });
+export async function onlineInvokeInterface(
+  body: API.InvokeInterfaceParam,
+  options?: { [key: string]: any },
+) {
+  return request<{ data: API.ResultVO }>('/api/userInterface/invokeInterface', {
+    method: 'POST',
+    data: body,
+    ...(options || {}),
+  });
 }
 
-
 /** 更新用户资料 PUT /api/user/profile */
-export async function updateUserProfile(body: API.UserProfileParam, options?: { [key: string]: any }) {
+export async function updateUserProfile(
+  body: API.UserProfileParam,
+  options?: { [key: string]: any },
+) {
+  console.log(body);
   return request<Record<string, any>>('/api/user/profile', {
     method: 'PUT',
-    data: {
-      ...body
-    },
+    data: body,
     ...(options || {}),
   });
 }
 
 /** 更新密码 PUT /api/user/profile/password */
-export async function updatePassword(body: API.UserPasswordParam, options?: { [key: string]: any }) {
+export async function updatePassword(
+  body: API.UserPasswordParam,
+  options?: { [key: string]: any },
+) {
   return request<Record<string, any>>('/api/user/profile/password', {
     method: 'PUT',
-    data: {
-      ...body
-    },
+    data: body,
     ...(options || {}),
   });
 }
