@@ -3,7 +3,7 @@ import { DefaultFooter } from '@ant-design/pro-components';
 import React from 'react';
 
 const Footer: React.FC = () => {
-  const defaultMessage = 'IMYUANXIAO出品';
+  const defaultMessage = '元宵出品';
 
   const currentYear = new Date().getFullYear();
 
@@ -15,21 +15,21 @@ const Footer: React.FC = () => {
       copyright={`${currentYear} ${defaultMessage}`}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
-          href: 'https://pro.ant.design',
+          key: 'IM',
+          title: 'IM',
+          href: 'https://github.com/imyuanxiao',
           blankTarget: true,
         },
         {
           key: 'github',
           title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          href: 'https://github.com/imyuanxiao',
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'YUAN XIAO',
+          title: 'YUAN XIAO',
+          href: 'https://github.com/imyuanxiao',
           blankTarget: true,
         },
       ]}

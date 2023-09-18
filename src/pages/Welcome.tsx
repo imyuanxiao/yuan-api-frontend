@@ -1,6 +1,6 @@
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
+import {Button, Card, theme} from 'antd';
 import React from 'react';
 
 /**
@@ -135,8 +135,26 @@ const Welcome: React.FC = () => {
               进行搭建，后端分为5个子项目。
             </p>
             <p>本项目主要用于个人学习研究。</p>
-            <a href={'https://github.com/imyuanxiao/yuan-api-frontend'}>点此查看项目前端仓库</a>
-            <a href={'https://github.com/imyuanxiao/yuan-api-backend'}>点此查看项目后端仓库</a>
+            <Button
+              href={'https://github.com/imyuanxiao/yuan-api-frontend'}
+              style={{
+                marginRight: "10px"
+              }}
+              type={"primary"}
+              target="_blank"
+            >
+              点此查看项目前端仓库
+            </Button>
+            <Button
+              href={'https://github.com/imyuanxiao/yuan-api-backend'}
+              style={{
+                marginRight: "10px"
+              }}
+              type={"primary"}
+              target="_blank"
+            >
+              点此查看项目后端仓库
+            </Button>
           </div>
         </div>
       </Card>

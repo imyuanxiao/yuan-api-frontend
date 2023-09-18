@@ -61,7 +61,7 @@ const Login: React.FC = () => {
   return (
     <div className={containerClassName}>
       <Helmet>
-        <title>'登录页' - {Settings.title}</title>
+        <title>登录页 - {Settings.title}</title>
       </Helmet>
       <div
         style={{
