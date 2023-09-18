@@ -76,6 +76,12 @@ const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({
             valueType: 'dateTime',
           },
           {
+            title: '请求参数示例',
+            dataIndex: 'requestParam',
+            valueType: 'textarea',
+            span: 4,
+          },
+          {
             title: '请求参数说明',
             dataIndex: 'requestParamRemark',
             valueType: 'jsonCode',
@@ -212,12 +218,6 @@ const InterfaceDetailModal: React.FC<InterfaceDetailModalProps> = ({
                 />
               );
             },
-          },
-          {
-            title: '请求参数示例',
-            dataIndex: 'requestParam',
-            valueType: 'textarea',
-            span: 4,
           },
         ]}
       />

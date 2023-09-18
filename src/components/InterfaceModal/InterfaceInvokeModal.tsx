@@ -32,7 +32,9 @@ const InterfaceInvokeModal: React.FC<InterfaceDetailModalProps> = ({
         path: interfaceInfo.path,
         requestParams: requestParamValue ? requestParamValue : interfaceInfo?.requestParam,
       });
+
       setResponseData(response);
+
     } else {
       message.error('页面数据异常！');
     }

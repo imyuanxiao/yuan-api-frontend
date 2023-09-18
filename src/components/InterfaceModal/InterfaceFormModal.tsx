@@ -276,16 +276,28 @@ const InterfaceFormModal: React.FC<InterfaceFormModalProps> = ({
           ...interfaceInfo,
           requestParam: interfaceInfo.requestParam,
           requestParamRemark: interfaceInfo.requestParamRemark
-            ? JSON.parse(interfaceInfo.requestParamRemark)
+            ? JSON.parse(interfaceInfo.requestParamRemark).map((item: any, index: number) => ({
+              ...item,
+              id: index + 2, // 添加递增的 id 属性
+            }))
             : undefined,
           requestHeader: interfaceInfo.requestHeader
-            ? JSON.parse(interfaceInfo.requestHeader)
+            ? JSON.parse(interfaceInfo.requestHeader).map((item: any, index: number) => ({
+              ...item,
+              id: index + 2, // 添加递增的 id 属性
+            }))
             : undefined,
           responseParamRemark: interfaceInfo.responseParamRemark
-            ? JSON.parse(interfaceInfo.responseParamRemark)
+            ? JSON.parse(interfaceInfo.responseParamRemark).map((item: any, index: number) => ({
+              ...item,
+              id: index + 2, // 添加递增的 id 属性
+            }))
             : undefined,
           responseHeader: interfaceInfo.responseHeader
-            ? JSON.parse(interfaceInfo.responseHeader)
+            ? JSON.parse(interfaceInfo.responseHeader).map((item: any, index: number) => ({
+              ...item,
+              id: index + 2, // 添加递增的 id 属性
+            }))
             : undefined,
         };
       }}

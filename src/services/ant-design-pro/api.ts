@@ -178,11 +178,14 @@ export async function onlineInvokeInterface(
   body: API.InvokeInterfaceParam,
   options?: { [key: string]: any },
 ) {
-  return request<{ data: API.ResultVO }>('/api/userInterface/invokeInterface', {
+  const jsonStr = await request<API.ResultVO>('/api/userInterface/invokeInterface', {
     method: 'POST',
     data: body,
     ...(options || {}),
   });
+
+  // @ts-ignore
+  return JSON.parse(jsonStr).data;
 }
 
 /** 更新用户资料 PUT /api/user/profile */
