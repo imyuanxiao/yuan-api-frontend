@@ -31,14 +31,31 @@ export default [
   {
     name: 'API商店',
     icon: 'ShopOutlined',
-    path: '/interfaceShop',
+    path: '/interface/shop',
     component: './InterfaceShop',
   },
   {
     name: '接口管理',
     icon: 'table',
-    path: '/interfaceAdmin',
-    component: './InterfaceAdmin',
+    path: '/interface/admin',
+    routes: [
+      {
+        path: '/interface/admin',
+        redirect: '/interface/admin/list',
+      },
+      {
+        name: '接口列表',
+        icon: 'table',
+        path: '/interface/admin/list',
+        component: './InterfaceAdmin',
+      },
+      {
+        name: '数据统计',
+        icon: 'table',
+        path: '/interface/admin/chart',
+        component: './InterfaceChart',
+      },
+    ],
   },
   {
     name: '我的接口',

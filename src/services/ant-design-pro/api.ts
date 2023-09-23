@@ -212,3 +212,11 @@ export async function updatePassword(
     ...(options || {}),
   });
 }
+
+/** 获取趋势表数据 GET /api/userInterface/chart/callTrend */
+export async function getChartCallTrend(options?: { [key: string]: any }) {
+  return request<number[]>('/api/userInterface/chart/callTrend', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
